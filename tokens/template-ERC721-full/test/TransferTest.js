@@ -1,6 +1,5 @@
 const { expect, util } = require("chai");
 const { ethers } = require("hardhat");
-const utils = require("../scripts/lib/utils");
 const constants = require("./util/constants");
 const deploy = require("./util/deploy");
 const testEvent = require("./util/testEvent"); 

@@ -1,4 +1,3 @@
-const Deployer = require("./deployer");
 const Runner = require("./lib/runner");
 const constants = require("./constants"); 
 

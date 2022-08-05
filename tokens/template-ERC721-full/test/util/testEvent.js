@@ -1,6 +1,5 @@
 const { expect } = require("chai");
 
-
 /**
  * Verifies that an event was fired and that the values associated with the event are as 
  * expected. 

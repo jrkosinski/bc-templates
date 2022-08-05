@@ -1,6 +1,5 @@
 const { expect } = require("chai");
 const { ethers } = require("hardhat");
-const utils = require("../scripts/lib/utils");
 const constants = require("./util/constants");
 const deploy = require("./util/deploy");
 const testEvent = require("./util/testEvent");
@@ -8,6 +7,7 @@ const testEvent = require("./util/testEvent");
 //TODO: make sure every error case is covered 
 //TODO: make sure all access control cases are covered 
 //TODO: add revertedWith with error msg variables 
+//TODO: remove all unused requires
 
 describe(constants.TOKEN_CONTRACT_ID + ": Access Control", function () {		  
 	let nft;				    //contracts
