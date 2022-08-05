@@ -165,28 +165,41 @@ describe(constants.TOKEN_CONTRACT_ID + ": Minting", function () {
             }
         }); 
         
-        //TODO: add one of these in supply tests, test again for exceeded count/user
         it("mint and transfer and mint again", async function () {
+            await nft.setCollectionSize(5); 
+            await nft.setMaxSupply(10); 
+            await nft.initialMint(); 
+            
+            //tokens 6 & 7 go to addr1
             await nft.mintNext(addr1.address);
             await nft.mintNext(addr1.address);
 
-            //TODO: comment this test case internally
-            expect(await nft.ownerOf(1)).to.equal(addr1.address);
-            expect(await nft.ownerOf(2)).to.equal(addr1.address);
-            await verifyTokenUri(1, 1);
-            await verifyTokenUri(2, 2); 
+            //verify ownership and uris
+            expect(await nft.ownerOf(6)).to.equal(addr1.address);
+            expect(await nft.ownerOf(7)).to.equal(addr1.address);
+            
+            //uris should be 1 & 2 
+            await verifyTokenUri(6, 1);
+            await verifyTokenUri(7, 2); 
 
-            await nft.connect(addr1).transferFrom(addr1.address, addr2.address, 2);
+            //transfer token 7 to another user 
+            await nft.connect(addr1).transferFrom(addr1.address, addr2.address, 7);
 
-            expect(await nft.ownerOf(1)).to.equal(addr1.address);
-            expect(await nft.ownerOf(2)).to.equal(addr2.address);
+            //verify new ownership 
+            expect(await nft.ownerOf(6)).to.equal(addr1.address);
+            expect(await nft.ownerOf(7)).to.equal(addr2.address);
 
+            //mint 2 more to addr1 (tokens 8 & 9)
             await nft.mintNext(addr1.address);
             await nft.mintNext(addr1.address);
-            expect(await nft.ownerOf(3)).to.equal(addr1.address);
-            expect(await nft.ownerOf(4)).to.equal(addr1.address);
-            await verifyTokenUri(3, 3);
-            await verifyTokenUri(4, 4); 
+            
+            //verify ownership 
+            expect(await nft.ownerOf(8)).to.equal(addr1.address);
+            expect(await nft.ownerOf(9)).to.equal(addr1.address);
+            
+            //uris should be 3 and 4 
+            await verifyTokenUri(8, 3);
+            await verifyTokenUri(9, 4); 
         });
     }); 
 

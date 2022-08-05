@@ -4,8 +4,6 @@ const utils = require("../scripts/lib/utils");
 const constants = require("./util/constants");
 const deploy = require("./util/deploy");
 
-//TODO: test that maxSupply cannot be less than collectionSize
-
 describe(constants.TOKEN_CONTRACT_ID + ": Supply Constraints", function () {		  
 	let nft;				        //contracts
 	let owner, addr1, addr2; 		//accounts
@@ -58,5 +56,27 @@ describe(constants.TOKEN_CONTRACT_ID + ": Supply Constraints", function () {
             //balance should not exceed collection size regardless
             expect(await nft.balanceOf(addr1.address)).to.be.equal(constants.COLLECTION_SIZE); 
 		});
-    });  
+
+        it("mint and transfer and mint again", async function () {
+            await nft.setCollectionSize(3);
+            await nft.setMaxSupply(10);
+            await nft.initialMint();
+
+            //tokens 4 & 5 go to addr1
+            await nft.mintNext(addr1.address);
+            await nft.mintNext(addr1.address);
+
+            //transfer token 5 and 6 to another user 
+            await nft.connect(addr1).transferFrom(addr1.address, addr2.address, 4);
+            await nft.connect(addr1).transferFrom(addr1.address, addr2.address, 5);
+
+            //verify new ownership 
+            expect(await nft.ownerOf(4)).to.equal(addr2.address);
+            expect(await nft.ownerOf(5)).to.equal(addr2.address);
+
+            //mint 2 more to addr1. the second one should exceed max per user
+            await expect(nft.mintNext(addr1.address)).to.not.be.reverted;
+            await expect(nft.mintNext(addr1.address)).to.be.reverted;
+        });
+    });
 });
