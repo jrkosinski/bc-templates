@@ -14,7 +14,7 @@ describe(constants.TOKEN_CONTRACT_ID + ": Supply Constraints", function () {
         //contract
 		nft = await deploy.deployNFT();
         
-        await nft.setMaxSupply(constants.COLLECTION_SIZE * 2); 
+        await nft.setSupplyParameters(constants.COLLECTION_SIZE * 2, constants.COLLECTION_SIZE); 
 	});
     
 	describe("Initial State", function () {
@@ -25,6 +25,16 @@ describe(constants.TOKEN_CONTRACT_ID + ": Supply Constraints", function () {
     });  
     
 	describe("Collection Size Constraints", function () {
+        it("validation of supply parameters", async function () {
+            
+            //this should revert, as it sets maxSupply to less than collection size 
+            await expect(nft.setSupplyParameters(100, 101)).to.be.reverted;
+            
+            //these should not revert: 
+            await expect(nft.setSupplyParameters(100, 100)).to.not.be.reverted;
+            await expect(nft.setSupplyParameters(101, 100)).to.not.be.reverted; 
+        });
+        
 		it("cannot mint more than max supply", async function () {
             await nft.multiMint(owner.address, constants.COLLECTION_SIZE); 
             await nft.multiMint(addr1.address, constants.COLLECTION_SIZE); 
@@ -58,8 +68,7 @@ describe(constants.TOKEN_CONTRACT_ID + ": Supply Constraints", function () {
 		});
 
         it("mint and transfer and mint again", async function () {
-            await nft.setCollectionSize(3);
-            await nft.setMaxSupply(10);
+            await nft.setSupplyParameters(10, 3);
             await nft.initialMint();
 
             //tokens 4 & 5 go to addr1

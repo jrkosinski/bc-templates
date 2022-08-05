@@ -108,21 +108,14 @@ contract Template721 is
     /**
      * @dev Owner can change the collectionSize - the number of items in the collection. 
      * 
-     * @param _collectionSize The new value to set for collectionSize. 
+     * @param _collectionSize The new value to set for collectionSize.
+     * @param _maxSupply The new value to set for maxSupply.
      */
-    function setCollectionSize(uint256 _collectionSize) external onlyRole(DEFAULT_ADMIN_ROLE) {
-        require(maxSupply >= _collectionSize, "NFT: Collection size cannot exceed max supply.");
-        collectionSize = _collectionSize;
-    }
-    
-    /**
-     * @dev Owner can change the maxSupply - the max number of items that can be minted. 
-     * 
-     * @param _maxSupply The new value to set for maxSupply. 
-     */
-    function setMaxSupply(uint256 _maxSupply) external onlyRole(DEFAULT_ADMIN_ROLE) {
-        require(_maxSupply >= collectionSize, "NFT: Collection size cannot exceed max supply.");
+    function setSupplyParameters(uint256 _maxSupply, uint256 _collectionSize) external onlyRole(DEFAULT_ADMIN_ROLE) {
+        require(_maxSupply >= _collectionSize, "NFT: Collection size cannot exceed max supply.");
+        
         maxSupply = _maxSupply;
+        collectionSize = _collectionSize;
     }
     
     /**

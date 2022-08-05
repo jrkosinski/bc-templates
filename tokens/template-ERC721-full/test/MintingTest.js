@@ -93,10 +93,9 @@ describe(constants.TOKEN_CONTRACT_ID + ": Minting", function () {
         
         it("mint next in collection", async function() {
             const collectionSize = 4; 
-            await nft.setCollectionSize(collectionSize); 
             
             //max supply is twice the collection size; so two sets can be minted
-            await nft.setMaxSupply(collectionSize * 2);
+            await nft.setSupplyParameters(collectionSize * 2, collectionSize);
             
             //mint one collection set to owner 
             await nft.initialMint(); 
@@ -113,10 +112,9 @@ describe(constants.TOKEN_CONTRACT_ID + ": Minting", function () {
         
         it("mint remaining in collection", async function () {
             const collectionSize = 4;
-            await nft.setCollectionSize(collectionSize);
-
+            
             //max supply is twice the collection size; so two sets can be minted
-            await nft.setMaxSupply(collectionSize * 2);
+            await nft.setSupplyParameters(collectionSize * 2, collectionSize);
 
             //mint one collection set to owner 
             await nft.initialMint(); 
@@ -150,7 +148,7 @@ describe(constants.TOKEN_CONTRACT_ID + ": Minting", function () {
         }); 
         
         it("correct multi-set token URIs", async function() {
-            await nft.setMaxSupply(constants.COLLECTION_SIZE * 3);
+            await nft.setSupplyParameters(constants.COLLECTION_SIZE * 3, constants.COLLECTION_SIZE);
             await nft.initialMint(); 
             await nft.multiMint(addr1.address, constants.COLLECTION_SIZE); 
             await nft.multiMint(addr2.address, constants.COLLECTION_SIZE); 
@@ -166,8 +164,7 @@ describe(constants.TOKEN_CONTRACT_ID + ": Minting", function () {
         }); 
         
         it("mint and transfer and mint again", async function () {
-            await nft.setCollectionSize(5); 
-            await nft.setMaxSupply(10); 
+            await nft.setSupplyParameters(10, 5); 
             await nft.initialMint(); 
             
             //tokens 6 & 7 go to addr1

@@ -5,6 +5,10 @@ const constants = require("./util/constants");
 const deploy = require("./util/deploy");
 const testEvent = require("./util/testEvent");
 
+//TODO: make sure every error case is covered 
+//TODO: make sure all access control cases are covered 
+//TODO: add revertedWith with error msg variables 
+
 describe(constants.TOKEN_CONTRACT_ID + ": Access Control", function () {		  
 	let nft;				    //contracts
 	let owner, addr1, addr2; 	//accounts
@@ -86,14 +90,9 @@ describe(constants.TOKEN_CONTRACT_ID + ": Access Control", function () {
             await expect(nft.connect(addr1).pause()).to.not.be.reverted;
 		});
         
-		it("non-admin cannot set max supply", async function () {
-            await expect(nft.connect(addr2).setMaxSupply(10)).to.be.reverted;
-            await expect(nft.connect(addr1).setMaxSupply(10)).to.not.be.reverted;
-        });
-
-        it("non-admin cannot set collection size", async function () {
-            await expect(nft.connect(addr2).setCollectionSize(1)).to.be.reverted;
-            await expect(nft.connect(addr1).setCollectionSize(1)).to.not.be.reverted;
+		it("non-admin cannot set supply parameters", async function () {
+            await expect(nft.connect(addr2).setSupplyParameters(10, 10)).to.be.reverted;
+            await expect(nft.connect(addr1).setSupplyParameters(10, 10)).to.not.be.reverted;
         });
         
 		it("non-admin set base URI", async function () {

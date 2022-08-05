@@ -40,15 +40,17 @@ describe(constants.TOKEN_CONTRACT_ID + ": Basic", function () {
 	
 	describe("Set/Read Properties", function () {
 		it("set/read max supply", async function () {
-            const newSupply = constants.MAX_SUPPLY + 1;
-            await nft.setMaxSupply(newSupply);
-			expect(await nft.maxSupply()).to.equal(newSupply); 
+            const newValue = constants.MAX_SUPPLY + 1;
+            await nft.setSupplyParameters(newValue, constants.COLLECTION_SIZE);
+            expect(await nft.maxSupply()).to.equal(newValue);
+            expect(await nft.collectionSize()).to.equal(constants.COLLECTION_SIZE); 
 		});
 		
         it("set/read collection size", async function () {
-            const newSize = constants.COLLECTION_SIZE - 1;
-            await nft.setCollectionSize(newSize);
-			expect(await nft.collectionSize()).to.equal(newSize); 
+            const newValue = constants.COLLECTION_SIZE - 1;
+            await nft.setSupplyParameters(constants.MAX_SUPPLY, newValue);
+            expect(await nft.collectionSize()).to.equal(newValue);
+            expect(await nft.maxSupply()).to.equal(constants.MAX_SUPPLY);
 		});
         
         it("set/read base URI", async function () {
