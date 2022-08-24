@@ -1,6 +1,5 @@
 const { expect } = require("chai");
 const { ethers } = require("hardhat");
-const utils = require("../scripts/lib/utils");
 const constants = require("./util/constants");
 const deploy = require("./util/deploy");
 
@@ -19,7 +18,6 @@ describe(constants.TOKEN_CONTRACT_ID + ": Basic", function () {
 		it("property values", async function () {
 			expect(await nft.maxSupply()).to.equal(constants.MAX_SUPPLY); 
 			expect(await nft.collectionSize()).to.equal(constants.COLLECTION_SIZE); 
-			//expect(await nft.baseUri()).to.equal(constants.BASE_URI); 
 			expect(await nft.name()).to.equal(constants.TOKEN_NAME); 
 			expect(await nft.symbol()).to.equal(constants.TOKEN_SYMBOL); 
 		});
@@ -50,11 +48,5 @@ describe(constants.TOKEN_CONTRACT_ID + ": Basic", function () {
             await nft.setSupplyParameters(constants.MAX_SUPPLY, newSize);
 			expect(await nft.collectionSize()).to.equal(newSize); 
 		});
-        
-        /*it("set/read base URI", async function () {
-            const newBaseUri = "NEW_BASE_URI";
-            await nft.setBaseUri(newBaseUri);
-			expect(await nft.baseUri()).to.equal(newBaseUri); 
-		});*/
     });  
 });
